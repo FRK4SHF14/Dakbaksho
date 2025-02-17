@@ -3,6 +3,7 @@ const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx-kTIErFXAnuHK70NCm
 
 // Initialize the page
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('Page initialized');
     loadLetters();
     initializeForm();
 });
@@ -38,6 +39,7 @@ async function handleSubmit(e) {
     if (!content.trim()) return;
     
     try {
+        console.log('Submitting message:', content);
         const response = await fetch(SCRIPT_URL, {
             method: 'POST',
             headers: {
@@ -45,24 +47,23 @@ async function handleSubmit(e) {
             },
             body: JSON.stringify({
                 message: content
-            })
+            }),
+            mode: 'no-cors' // Add this to handle CORS
         });
 
-        if (response.ok) {
-            document.getElementById('letterContent').value = '';
-            showSuccessAnimation();
-            
-            // If we're on the letters page, refresh the letters
-            if (window.location.pathname.includes('letters.html')) {
-                loadLetters();
-            } else {
-                // Redirect to letters page after brief delay
-                setTimeout(() => {
-                    window.location.href = 'letters.html';
-                }, 1000);
-            }
+        console.log('Submission response:', response);
+        
+        document.getElementById('letterContent').value = '';
+        showSuccessAnimation();
+        
+        // If we're on the letters page, refresh the letters
+        if (window.location.pathname.includes('letters.html')) {
+            loadLetters();
         } else {
-            throw new Error('Failed to save message');
+            // Redirect to letters page after brief delay
+            setTimeout(() => {
+                window.location.href = 'letters.html';
+            }, 1000);
         }
     } catch (error) {
         console.error('Error saving letter:', error);
@@ -87,14 +88,27 @@ function showSuccessAnimation() {
 // Load letters from Google Apps Script
 async function loadLetters() {
     const container = document.getElementById('lettersContainer');
-    if (!container) return;
+    if (!container) {
+        console.log('Letters container not found');
+        return;
+    }
     
     try {
+        console.log('Fetching letters...');
         const response = await fetch(SCRIPT_URL);
+        console.log('Response:', response);
+        
         if (!response.ok) throw new Error('Failed to fetch messages');
         
         const letters = await response.json();
-        displayLetters(letters);
+        console.log('Fetched letters:', letters);
+        
+        if (Array.isArray(letters)) {
+            displayLetters(letters);
+        } else {
+            console.error('Received data is not an array:', letters);
+            container.innerHTML = '<p>Error: Invalid data format received</p>';
+        }
     } catch (error) {
         console.error('Error loading letters:', error);
         container.innerHTML = '<p>Failed to load letters. Please try again later.</p>';
@@ -104,6 +118,13 @@ async function loadLetters() {
 // Display letters in the container
 function displayLetters(letters) {
     const container = document.getElementById('lettersContainer');
+    if (!letters || letters.length === 0) {
+        console.log('No letters to display');
+        container.innerHTML = '<p>No letters yet. Be the first to write one!</p>';
+        return;
+    }
+    
+    console.log('Displaying letters:', letters);
     container.innerHTML = '';
     
     letters.reverse().forEach(letter => {
@@ -114,6 +135,7 @@ function displayLetters(letters) {
 
 // Create letter element
 function createLetterElement(letter) {
+    console.log('Creating element for letter:', letter);
     const div = document.createElement('div');
     div.className = 'letter';
     
