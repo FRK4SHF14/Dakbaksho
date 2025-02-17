@@ -3,37 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Love Letters ❤️</title>
+    <title>Letters - Letter Management System</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://apis.google.com/js/api.js"></script>
 </head>
-<body class="letters-page">
-    <div class="floating-hearts"></div>
-
-    <nav class="top-nav animate__animated animate__fadeInDown">
-        <div class="nav-links">
-            <a href="index.html"><i class="fas fa-pen-fancy"></i> Write Letter</a>
-            <a href="letters.html" class="active"><i class="fas fa-envelope-open-text"></i> Our Letters</a>
-        </div>
-        <button class="theme-toggle">
-            <i class="fas fa-moon"></i>
-        </button>
-    </nav>
-
-    <div class="container">
-        <div class="letters-container">
-            <div class="postbox-title animate__animated animate__fadeInDown">
-                <i class="fas fa-dove"></i>
-                <h1>Our Love Story</h1>
-                <i class="fas fa-dove fa-flip-horizontal"></i>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>LetterHub</h1>
             </div>
-            
-            <div id="lettersFeed" class="letters-feed">
-                <!-- Letters will be loaded here -->
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="letters.html" class="active">Letters</a></li>
+                </ul>
+            </nav>
+            <div class="theme-toggle">
+                <i class="fas fa-moon"></i>
+            </div>
+        </div>
+    </header>
+
+    <section class="letters-hero">
+        <div class="container">
+            <h1>Your Letters</h1>
+            <p>View, search, and manage all your important communications.</p>
+        </div>
+    </section>
+
+    <section class="letters-main">
+        <div class="container">
+            <div class="letters-controls">
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="Search by keyword, sender, or date...">
+                    <i class="fas fa-search"></i>
+                </div>
+                <button id="new-letter-btn" class="btn-primary"><i class="fas fa-plus"></i> New Letter</button>
+            </div>
+
+            <div class="letters-container" id="letters-container">
+                <div class="loading">
+                    <i class="fas fa-spinner fa-pulse"></i>
+                    <p>Loading letters...</p>
+                </div>
+                <!-- Letters will be dynamically inserted here by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal for adding new letter -->
+    <div class="modal" id="new-letter-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Letter</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="new-letter-form">
+                    <div class="form-group">
+                        <label for="letter-subject">Subject</label>
+                        <input type="text" id="letter-subject" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="letter-sender">Sender</label>
+                        <input type="text" id="letter-sender" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="letter-content">Content</label>
+                        <textarea id="letter-content" rows="6" required></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" id="cancel-letter">Cancel</button>
+                        <button type="submit" class="btn-primary">Submit Letter</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+
+    <!-- Modal for viewing letter details -->
+    <div class="modal" id="view-letter-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-letter-subject">Letter Subject</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="letter-details">
+                    <p><strong>Date:</strong> <span id="modal-letter-date"></span></p>
+                    <p><strong>Sender:</strong> <span id="modal-letter-sender"></span></p>
+                    <div class="letter-content-container">
+                        <h3>Content:</h3>
+                        <p id="modal-letter-content"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <p><i class="fas fa-envelope"></i> info@letterhub.com</p>
+                    <p><i class="fas fa-phone"></i> (123) 456-7890</p>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Letter Lane, Document City</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Follow Us</h3>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section map">
+                    <h3>Find Us</h3>
+                    <div class="google-map">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3024.2219901290355!2d-74.00425768461579!3d40.71312937933185!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDDCsDA0JzUyLjYiTiA3NMKwMDAnMTMuMCJX!5e0!3m2!1sen!2sus!4v1586370239815!5m2!1sen!2sus" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 LetterHub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 
     <script src="script.js"></script>
 </body>
