@@ -1,329 +1,241 @@
-// Google Apps Script endpoint URL
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx-kTIErFXAnuHK70NCmm4sXeggZHFkLFZtqYeeimesOzCj7u6Ymi76QafH3ZM7NSIzYw/exec';
+:root {
+    --primary-color: #ff8fa3;
+    --secondary-color: #ffb3c1;
+    --accent-color: #ffd1dc;
+    --background-color: #fff5f7;
+    --text-color: #4a4a4a;
+    --shadow-color: rgba(255, 143, 163, 0.2);
+}
 
-// DOM Elements
-const themeToggle = document.querySelector('.theme-toggle');
-const searchInput = document.getElementById('search-input');
-const lettersContainer = document.getElementById('letters-container');
-const newLetterBtn = document.getElementById('new-letter-btn');
-const newLetterModal = document.getElementById('new-letter-modal');
-const viewLetterModal = document.getElementById('view-letter-modal');
-const closeModalBtns = document.querySelectorAll('.close-modal');
-const cancelLetterBtn = document.getElementById('cancel-letter');
-const newLetterForm = document.getElementById('new-letter-form');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-// Global variables
-let letters = [];
+body {
+    font-family: 'Poppins', 'Noto Serif Bengali', sans-serif;
+    background: linear-gradient(135deg, var(--background-color), #fff);
+    color: var(--text-color);
+    min-height: 100vh;
+}
 
-// Initialize the application
-document.addEventListener('DOMContentLoaded', () => {
-    // Set up theme toggling
-    themeToggle.addEventListener('click', toggleTheme);
-    checkThemePreference();
-    
-    // Check if current page is letters.html
-    if (window.location.pathname.includes('letters.html')) {
-        fetchLetters();
-        setupLettersPageEvents();
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.lang-toggle, .view-letters, .write-new {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 25px;
+    background: white;
+    color: var(--primary-color);
+    box-shadow: 0 4px 6px var(--shadow-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.lang-toggle:hover, .view-letters:hover, .write-new:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px var(--shadow-color);
+}
+
+.page-title {
+    font-family: 'Dancing Script', cursive;
+    color: var(--primary-color);
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+}
+
+.paper {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 10px 20px var(--shadow-color);
+}
+
+.letter-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+textarea {
+    width: 100%;
+    min-height: 200px;
+    padding: 1rem;
+    border: 2px solid var(--accent-color);
+    border-radius: 10px;
+    font-family: 'Poppins', 'Noto Serif Bengali', sans-serif;
+    font-size: 1rem;
+    resize: vertical;
+}
+
+.submit-btn {
+    align-self: center;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 25px;
+    background: var(--primary-color);
+    color: white;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    background: var(--secondary-color);
+}
+
+.letters-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.letter {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 5px 15px var(--shadow-color);
+    transition: all 0.3s ease;
+}
+
+.letter:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px var(--shadow-color);
+}
+
+.letter-content {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.letter-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #888;
+}
+
+.letter-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.heart-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    transition: transform 0.3s ease;
+}
+
+.heart-btn:hover {
+    transform: scale(1.2);
+}
+
+.heart-animation {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.footer {
+    margin-top: 3rem;
+    text-align: center;
+}
+
+.hearts {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.heart {
+    width: 20px;
+    height: 20px;
+    background: var(--primary-color);
+    position: relative;
+    transform: rotate(45deg);
+    animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+.heart::before,
+.heart::after {
+    content: '';
+    width: 20px;
+    height: 20px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    position: absolute;
+}
+
+.heart::before {
+    top: -10px;
+    left: 0;
+}
+
+.heart::after {
+    top: 0;
+    left: -10px;
+}
+
+@keyframes heartbeat {
+    0% { transform: rotate(45deg) scale(1); }
+    25% { transform: rotate(45deg) scale(1.1); }
+    50% { transform: rotate(45deg) scale(1); }
+    75% { transform: rotate(45deg) scale(1.1); }
+    100% { transform: rotate(45deg) scale(1); }
+}
+
+.bn {
+    display: none;
+}
+
+[lang="bn"] .bn {
+    display: inline-block;
+}
+
+[lang="bn"] .en {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
     }
     
-    // Smooth scrolling for navigation links
-    setupSmoothScrolling();
-});
-
-// Theme toggling functionality
-function toggleTheme() {
-    document.body.classList.toggle('dark-mode');
-    const themeIcon = themeToggle.querySelector('i');
-    
-    if (document.body.classList.contains('dark-mode')) {
-        themeIcon.classList.remove('fa-moon');
-        themeIcon.classList.add('fa-sun');
-        localStorage.setItem('theme', 'dark');
-    } else {
-        themeIcon.classList.remove('fa-sun');
-        themeIcon.classList.add('fa-moon');
-        localStorage.setItem('theme', 'light');
-    }
-}
-
-// Check saved theme preference
-function checkThemePreference() {
-    const savedTheme = localStorage.getItem('theme');
-    const themeIcon = themeToggle.querySelector('i');
-    
-    if (savedTheme === 'dark') {
-        document.body.classList.add('dark-mode');
-        themeIcon.classList.remove('fa-moon');
-        themeIcon.classList.add('fa-sun');
-    }
-}
-
-// Fetch letters from Google Apps Script
-function fetchLetters() {
-    if (!lettersContainer) return;
-    
-    showLoading();
-    
-    fetch(SCRIPT_URL)
-        .then(response => response.json())
-        .then(data => {
-            // Convert message data to letter format
-            letters = data.map((item, index) => {
-                // Parse the message content to extract subject, sender and content
-                // Assuming message format is JSON string: {subject: "...", sender: "...", content: "..."}
-                let messageDetails;
-                try {
-                    messageDetails = JSON.parse(item.message);
-                } catch (e) {
-                    messageDetails = {
-                        subject: 'Unknown Subject',
-                        sender: 'Unknown Sender',
-                        content: item.message || 'No content available'
-                    };
-                }
-                
-                return {
-                    id: index,
-                    date: new Date(item.timestamp).toLocaleDateString(),
-                    subject: messageDetails.subject || 'No Subject',
-                    sender: messageDetails.sender || 'Unknown Sender',
-                    content: messageDetails.content || 'No content available'
-                };
-            });
-            
-            displayLetters(letters);
-        })
-        .catch(error => {
-            showError('Failed to fetch letters', error);
-        });
-}
-
-// Display letters in the UI
-function displayLetters(lettersToDisplay) {
-    if (!lettersContainer) return;
-    
-    lettersContainer.innerHTML = '';
-    
-    if (lettersToDisplay.length === 0) {
-        lettersContainer.innerHTML = `
-            <div class="no-letters">
-                <i class="fas fa-envelope-open"></i>
-                <p>No letters found. Try a different search or add a new letter.</p>
-            </div>
-        `;
-        return;
+    .page-title {
+        font-size: 2rem;
     }
     
-    lettersToDisplay.forEach(letter => {
-        const letterCard = document.createElement('div');
-        letterCard.className = 'letter-card';
-        letterCard.dataset.id = letter.id;
-        
-        letterCard.innerHTML = `
-            <h3 class="letter-subject">${letter.subject}</h3>
-            <div class="letter-details">
-                <span><i class="fas fa-calendar-alt"></i> ${letter.date}</span>
-                <span><i class="fas fa-user"></i> ${letter.sender}</span>
-            </div>
-            <p class="letter-content">${letter.content.substring(0, 150)}${letter.content.length > 150 ? '...' : ''}</p>
-        `;
-        
-        letterCard.addEventListener('click', () => {
-            openViewLetterModal(letter);
-        });
-        
-        lettersContainer.appendChild(letterCard);
-    });
-}
-
-// Search/filter letters
-function setupLettersPageEvents() {
-    if (!searchInput || !newLetterBtn || !newLetterForm) return;
-    
-    // Setup search functionality
-    searchInput.addEventListener('input', () => {
-        const searchTerm = searchInput.value.toLowerCase();
-        
-        const filteredLetters = letters.filter(letter => {
-            return letter.subject.toLowerCase().includes(searchTerm) ||
-                   letter.sender.toLowerCase().includes(searchTerm) ||
-                   letter.date.toLowerCase().includes(searchTerm) ||
-                   letter.content.toLowerCase().includes(searchTerm);
-        });
-        
-        displayLetters(filteredLetters);
-    });
-    
-    // Setup new letter modal
-    newLetterBtn.addEventListener('click', () => {
-        newLetterModal.style.display = 'block';
-    });
-    
-    closeModalBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            newLetterModal.style.display = 'none';
-            viewLetterModal.style.display = 'none';
-        });
-    });
-    
-    cancelLetterBtn.addEventListener('click', () => {
-        newLetterModal.style.display = 'none';
-    });
-    
-    // Setup form submission
-    newLetterForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        
-        const letterSubject = document.getElementById('letter-subject').value;
-        const letterSender = document.getElementById('letter-sender').value;
-        const letterContent = document.getElementById('letter-content').value;
-        
-        // Create message object
-        const messageObj = {
-            subject: letterSubject,
-            sender: letterSender,
-            content: letterContent
-        };
-        
-        // Send to Google Apps Script
-        submitLetter(messageObj);
-    });
-    
-    // Close modals when clicking outside content
-    window.addEventListener('click', (e) => {
-        if (e.target === newLetterModal) {
-            newLetterModal.style.display = 'none';
-        }
-        if (e.target === viewLetterModal) {
-            viewLetterModal.style.display = 'none';
-        }
-    });
-}
-
-// Submit new letter to Google Apps Script
-function submitLetter(messageObj) {
-    const messageString = JSON.stringify(messageObj);
-    
-    fetch(SCRIPT_URL, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ message: messageString })
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.text();
-    })
-    .then(() => {
-        // Reset form and close modal
-        newLetterForm.reset();
-        newLetterModal.style.display = 'none';
-        
-        // Refresh letters
-        fetchLetters();
-        
-        // Show success message
-        showNotification('Letter submitted successfully!', 'success');
-    })
-    .catch(error => {
-        showError('Failed to submit letter', error);
-    });
-}
-
-// Open view letter modal
-function openViewLetterModal(letter) {
-    const modalSubject = document.getElementById('modal-letter-subject');
-    const modalDate = document.getElementById('modal-letter-date');
-    const modalSender = document.getElementById('modal-letter-sender');
-    const modalContent = document.getElementById('modal-letter-content');
-    
-    modalSubject.textContent = letter.subject;
-    modalDate.textContent = letter.date;
-    modalSender.textContent = letter.sender;
-    modalContent.textContent = letter.content;
-    
-    viewLetterModal.style.display = 'block';
-}
-
-// Show loading state
-function showLoading() {
-    if (!lettersContainer) return;
-    
-    lettersContainer.innerHTML = `
-        <div class="loading">
-            <i class="fas fa-spinner fa-pulse"></i>
-            <p>Loading letters...</p>
-        </div>
-    `;
-}
-
-// Show error message
-function showError(message, error) {
-    console.error(message, error);
-    
-    if (lettersContainer) {
-        lettersContainer.innerHTML = `
-            <div class="error-message">
-                <i class="fas fa-exclamation-circle"></i>
-                <p>${message}</p>
-                <button class="btn-primary retry-btn">Try Again</button>
-            </div>
-        `;
-        
-        const retryBtn = document.querySelector('.retry-btn');
-        if (retryBtn) {
-            retryBtn.addEventListener('click', fetchLetters);
-        }
+    .paper {
+        padding: 1.5rem;
     }
     
-    showNotification(message, 'error');
-}
-
-// Show notification
-function showNotification(message, type = 'info') {
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.innerHTML = `
-        <p>${message}</p>
-        <button class="close-notification">&times;</button>
-    `;
-    
-    document.body.appendChild(notification);
-    
-    // Auto remove after 5 seconds
-    setTimeout(() => {
-        notification.classList.add('fade-out');
-        setTimeout(() => {
-            notification.remove();
-        }, 500);
-    }, 5000);
-    
-    // Close button
-    const closeBtn = notification.querySelector('.close-notification');
-    closeBtn.addEventListener('click', () => {
-        notification.remove();
-    });
-}
-
-// Setup smooth scrolling
-function setupSmoothScrolling() {
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            const targetId = this.getAttribute('href').substring(1);
-            const targetElement = document.getElementById(targetId);
-            
-            if (targetElement) {
-                window.scrollTo({
-                    top: targetElement.offsetTop - 70,
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
+    .letter {
+        padding: 1rem;
+    }
 }
