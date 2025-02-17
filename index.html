@@ -3,54 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Love Letters</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Noto+Serif+Bengali&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <title>Our Vintage Love Letters</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Noto+Serif+Bengali&family=Dancing+Script&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <nav class="navigation">
-            <button class="lang-toggle" onclick="toggleLanguage()">
-                <span class="en">Switch to বাংলা</span>
-                <span class="bn">Switch to English</span>
-            </button>
-            <a href="letters.html" class="view-letters">
-                <span class="en">View Letters</span>
-                <span class="bn">চিঠি দেখুন</span>
-            </a>
-        </nav>
+    <div class="vintage-background">
+        <div class="container">
+            <nav class="vintage-nav">
+                <button class="vintage-btn lang-toggle" onclick="toggleLanguage()">
+                    <span class="en">Switch to বাংলা</span>
+                    <span class="bn">Switch to English</span>
+                </button>
+                <a href="letters.html" class="vintage-btn view-letters">
+                    <span class="en">View Letters</span>
+                    <span class="bn">চিঠি দেখুন</span>
+                </a>
+            </nav>
 
-        <main class="write-letter">
-            <div class="paper">
-                <h1 class="page-title">
-                    <span class="en">Write a Love Letter</span>
-                    <span class="bn">প্রেমপত্র লিখুন</span>
-                </h1>
-                
-                <form id="letterForm" class="letter-form">
-                    <div class="form-group">
-                        <textarea 
-                            id="letterContent" 
-                            required
-                            placeholder="Write your message here..."
-                            data-bn-placeholder="আপনার বার্তা এখানে লিখুন..."></textarea>
+            <main class="write-letter">
+                <div class="vintage-paper">
+                    <div class="paper-content">
+                        <h1 class="vintage-title">
+                            <span class="en">Write a Love Letter</span>
+                            <span class="bn">প্রেমপত্র লিখুন</span>
+                        </h1>
+                        
+                        <form id="letterForm" class="vintage-form">
+                            <div class="form-group">
+                                <textarea 
+                                    id="letterContent" 
+                                    required
+                                    placeholder="My dearest..."
+                                    data-bn-placeholder="প্রিয়তম..."></textarea>
+                            </div>
+                            <button type="submit" class="vintage-submit-btn">
+                                <span class="en">Seal with Love</span>
+                                <span class="bn">প্রেম দিয়ে সীল করুন</span>
+                                <div class="wax-seal"></div>
+                            </button>
+                        </form>
                     </div>
-                    <button type="submit" class="submit-btn">
-                        <span class="en">Send Letter</span>
-                        <span class="bn">চিঠি পাঠান</span>
-                        <div class="heart-animation"></div>
-                    </button>
-                </form>
-            </div>
-        </main>
+                </div>
+            </main>
 
-        <footer class="footer">
-            <div class="hearts">
-                <div class="heart"></div>
-                <div class="heart"></div>
-                <div class="heart"></div>
-            </div>
-        </footer>
+            <footer class="vintage-footer">
+                <div class="ornament">❦</div>
+            </footer>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
