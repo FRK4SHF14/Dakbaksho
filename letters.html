@@ -35,6 +35,58 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        // Dummy letter data for the sake of this example
+        const letters = [
+            {
+                content: 'I love you more than words can say...',
+                timestamp: '2025-02-18'
+            },
+            {
+                content: 'Your smile brightens my day...',
+                timestamp: '2025-02-17'
+            }
+        ];
+
+        // Function to load the letters
+        function loadLetters() {
+            const lettersFeed = document.getElementById('lettersFeed');
+            lettersFeed.innerHTML = '';
+            letters.forEach(letter => {
+                const letterCard = document.createElement('div');
+                letterCard.classList.add('letter-card');
+                letterCard.innerHTML = `
+                    <div class="letter-content">${letter.content}</div>
+                    <div class="letter-timestamp">${letter.timestamp}</div>
+                `;
+                lettersFeed.appendChild(letterCard);
+            });
+        }
+
+        // Load letters on page load
+        window.onload = loadLetters;
+
+        // Success modal
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            if (messageInput.value) {
+                // Add letter to some database or array (for simplicity, we're not doing that here)
+                // Show success modal
+                const successModal = document.querySelector('.success-modal');
+                successModal.style.display = 'flex';
+
+                // Close modal after a short delay
+                setTimeout(() => {
+                    successModal.style.display = 'none';
+                }, 2000);
+            }
+        }
+
+        // Theme toggle functionality
+        const themeToggle = document.querySelector('.theme-toggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-theme');
+        });
+    </script>
 </body>
 </html>
