@@ -139,15 +139,19 @@ async function fetchMessages() {
             const formattedDate = date.toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'long',
-                day: 'numeric',
+                day: 'numeric'
+            });
+            
+            const formattedTime = date.toLocaleTimeString('en-US', {
                 hour: '2-digit',
-                minute: '2-digit'
+                minute: '2-digit',
+                hour12: true
             });
             
             letterCard.innerHTML = `
                 <div class="letter-content">${msg.message}</div>
                 <div class="letter-timestamp">
-                    <i class="far fa-clock"></i> ${formattedDate}
+                    <i class="far fa-clock"></i> ${formattedDate} at ${formattedTime}
                 </div>
             `;
             
