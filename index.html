@@ -3,55 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Love Letters ❤️</title>
+    <title>Letters</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <!-- Font Awesome for heart icon and theme toggle icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="floating-hearts"></div>
-    
-    <nav class="top-nav animate__animated animate__fadeInDown">
-        <div class="nav-links">
-            <a href="index.html" class="active"><i class="fas fa-pen-fancy"></i> Write Letter</a>
-            <a href="letters.html"><i class="fas fa-envelope-open-text"></i> Our Letters</a>
-        </div>
-        <button class="theme-toggle">
-            <i class="fas fa-moon"></i>
-        </button>
-    </nav>
+    <!-- Floating Hearts -->
+    <div class="floating-hearts">
+        <i class="fas fa-heart"></i>
+        <i class="fas fa-heart"></i>
+        <i class="fas fa-heart"></i>
+    </div>
 
     <div class="container">
-        <div class="paper-container animate__animated animate__zoomIn">
-            <div class="paper">
-                <div class="paper-content">
-                    <div class="letter-header">
-                        <div class="date"></div>
-                        <div class="love-stamp">
-                            <i class="fas fa-heart"></i>
-                        </div>
-                    </div>
-                    <textarea id="messageInput" placeholder="Write your love letter here...
-প্রিয়তম, তোমার জন্য আমার কথাগুলি..."></textarea>
-                </div>
-                <div class="corner-fold"></div>
-                <div class="paper-shadow"></div>
+        <!-- Top Navigation Bar -->
+        <div class="top-nav">
+            <div class="nav-links">
+                <a href="#" class="active">Home</a>
+                <a href="#">About</a>
+                <a href="#">Contact</a>
             </div>
-            
-            <button class="send-button" onclick="sendMessage()">
-                <div class="wax-seal">
-                    <i class="fas fa-heart"></i>
-                </div>
-                <span>Seal with Love</span>
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i> <!-- Theme toggle icon -->
             </button>
+        </div>
+
+        <!-- Letters Feed Section -->
+        <div class="letters-container">
+            <h2 class="postbox-title">Your Letters</h2>
+
+            <!-- Example Letter Cards -->
+            <div class="letter-card">
+                <div class="letter-content">
+                    <p>Hello, this is a sample letter! 🎉</p>
+                </div>
+                <div class="letter-timestamp">Sent: 2025-02-18</div>
+            </div>
+
+            <div class="letter-card">
+                <div class="letter-content">
+                    <p>Another exciting letter! 😊</p>
+                </div>
+                <div class="letter-timestamp">Sent: 2025-02-17</div>
+            </div>
         </div>
     </div>
 
-    <div class="success-modal">
-        <div class="modal-content">
-            <i class="fas fa-heart modal-heart"></i>
-            <p>Letter Sent with Love ❤️</p>
-        </div>
+    <!-- Success Modal -->
+    <div class="success-modal" id="successModal">
+        <i class="fas fa-check-circle"></i> Letter sent successfully!
     </div>
 
     <script src="script.js"></script>
